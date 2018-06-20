@@ -1,0 +1,13 @@
+{
+  "name": "dharma-chain",
+  "version": "1.0.0",
+  "description": "Set up a local blockchain running Ethereum with Dharma Protocol Smart Contracts",
+  "bin": {
+    "dharma-chain": "./scripts/init_chain.sh"
+  },
+  "author": "Dharma Labs",
+  "license": "MIT",
+  "dependencies": {
+    "ganache-cli": "^6.1.3"
+  }
+}
