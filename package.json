@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Set up a local blockchain running Ethereum with Dharma Protocol Smart Contracts",
   "bin": {
-    "dharma-chain": "./scripts/init_chain.sh"
+    "dharma-chain": "./index.js"
   },
   "author": "Dharma Labs",
   "license": "MIT",
