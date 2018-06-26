@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 const child_process = require("child_process");
-const colors = require("colors");
 
 // This version of ganache is required globally.
 const requiredGanache = "ganache-cli@6.1.3";
@@ -24,7 +23,7 @@ const installGanacheProcess = child_process.exec(
     }
 
     if (error !== null) {
-    console.log(`exec error: ${error}`.red);
+    console.log(`exec error: ${error}`);
 }
 },
 );
@@ -39,13 +38,13 @@ initChainProcess.on('exit', function (code, signal) {
     if (!chainStarted) {
         console.error(`
 Local blockchain (running on ganache-cli) failed to start!
-        `.red);
+        `);
     }
 
     console.error(`
 Local blockchain (ganache-cli) exited with
 code ${code} and signal ${signal}
-    `.red);
+    `);
 });
 
 initChainProcess.stdout.on('data', function(data) {
