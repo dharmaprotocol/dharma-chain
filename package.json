@@ -5,9 +5,7 @@
   "bin": {
     "dharma-chain": "./index.js"
   },
+
   "author": "Dharma Labs",
-  "license": "MIT",
-  "dependencies": {
-    "ganache-cli": "^6.1.3"
-  }
+  "license": "MIT"
 }
