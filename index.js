@@ -14,51 +14,52 @@ console.log(
 const installGanacheProcess = child_process.exec(
     `npm list ${requiredGanache} -g || npm install ${requiredGanache} -g`,
     (error, stdout, stderr) => {
-    if (stdout) {
-        console.log('Found ganache-cli:', stdout);
-    }
+        if (stdout) {
+            console.log('Found ganache-cli:', stdout);
+        }
 
-    if (stderr) {
-        console.log('stderr:', stderr);
-    }
+        if (stderr) {
+            console.log('stderr:', stderr);
+        }
 
-    if (error !== null) {
-    console.log(`exec error: ${error}`);
-}
-},
+        if (error !== null) {
+            console.log(`exec error: ${error}`);
+        }
+    },
 );
 
+// Once we have installed Ganache-CLI, we can init a chain and migrate the contracts.
 installGanacheProcess.on("exit", () => {
     const initChainProcess = child_process.spawn(`${scriptsDir}/init_chain.sh`);
 
-// True once ganache-cli has begun.
-let chainStarted = false;
+    // True once ganache-cli has begun.
+    let chainStarted = false;
 
-initChainProcess.on('exit', function (code, signal) {
-    if (!chainStarted) {
-        console.error(`
+    initChainProcess.on('exit', function (code, signal) {
+        if (!chainStarted) {
+            console.error(`
 Local blockchain (running on ganache-cli) failed to start!
         `);
-    }
+        }
 
-    console.error(`
+        console.error(`
 Local blockchain (ganache-cli) exited with
 code ${code} and signal ${signal}
     `);
-});
+    });
 
-initChainProcess.stdout.on('data', function(data) {
-    chainStarted = true;
-    console.log(data.toString());
-});
+    initChainProcess.stdout.on('data', function (data) {
+        chainStarted = true;
+        console.log(data.toString());
+    });
 
-const migrateContractsProcess = child_process.exec(`${scriptsDir}/migrate_contracts.sh`);
+    const migrateContractsProcess = child_process.exec(`${scriptsDir}/migrate_contracts.sh`);
 
-migrateContractsProcess.stdout.on('data', function(data) {
-    console.log(data);
-});
+    migrateContractsProcess.stdout.on('data', function (data) {
+        console.log(data);
+    });
 
-process.on('exit', () => {
-    initChainProcess.kill();
-});
+    process.on('exit', () => {
+        initChainProcess.kill();
+    });
 });
