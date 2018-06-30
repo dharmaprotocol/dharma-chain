@@ -6,6 +6,12 @@ const requiredGanache = "ganache-cli@6.1.3";
 
 const scriptsDir = `${__dirname}/scripts`;
 
+const ProgressBar = require("./lib/progress-bar");
+
+const bar = new ProgressBar(`
+    Progress: [:bar] :percent
+`, { total: 925 });
+
 console.log('Checking Ganache Version...');
 console.log(
     "Running:", `npm list ${requiredGanache} -g || npm install ${requiredGanache} -g`
@@ -51,12 +57,14 @@ code ${code} and signal ${signal}
     initChainProcess.stdout.on('data', function (data) {
         chainStarted = true;
         console.log(data.toString());
+        bar.tick();
     });
 
     const migrateContractsProcess = child_process.exec(`${scriptsDir}/migrate_contracts.sh`);
 
     migrateContractsProcess.stdout.on('data', function (data) {
         console.log(data);
+        bar.tick();
     });
 
     process.on('exit', () => {
