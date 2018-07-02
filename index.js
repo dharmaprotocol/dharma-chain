@@ -10,7 +10,7 @@ const ProgressBar = require("./lib/progress-bar");
 
 const bar = new ProgressBar(`
     Progress: [:bar] :percent
-`, { total: 925 });
+`, { total: 922 });
 
 console.log('Checking Ganache Version...');
 console.log(
