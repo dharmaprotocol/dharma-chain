@@ -31,33 +31,33 @@ const installGanacheProcess = child_process.exec(
 // Once we have installed Ganache-CLI, we can init a chain and migrate the contracts.
 installGanacheProcess.on("exit", async () => {
     console.log("Replacing working data with pristine blockchain state");
-    await child_process.exec(`rm -r ${dataDir}/working; cp -r ${dataDir}/pristine ${dataDir}/working`);
+    child_process.exec(`rm -r ${dataDir}/working; cp -r ${dataDir}/pristine ${dataDir}/working`, () => {
+        const initChainProcess = child_process.spawn(`${scriptsDir}/init_chain.sh`);
+        const mineBlockProcess = child_process.spawn(`${scriptsDir}/mine_block.sh`);
 
-    const initChainProcess = child_process.spawn(`${scriptsDir}/init_chain.sh`);
-    const mineBlockProcess = child_process.spawn(`${scriptsDir}/mine_block.sh`);
+        // True once ganache-cli has begun.
+        let chainStarted = false;
 
-    // True once ganache-cli has begun.
-    let chainStarted = false;
+        initChainProcess.on("exit", function (code, signal) {
+            if (!chainStarted) {
+                console.error(`Local blockchain (running on ganache-cli) failed to start!`);
+            }
 
-    initChainProcess.on("exit", function(code, signal) {
-        if (!chainStarted) {
-            console.error(`Local blockchain (running on ganache-cli) failed to start!`);
-        }
+            console.error(`Local blockchain (ganache-cli) exited with code ${code} and signal ${signal}`);
+        });
 
-        console.error(`Local blockchain (ganache-cli) exited with code ${code} and signal ${signal}`);
-    });
+        initChainProcess.stdout.on("data", function (data) {
+            chainStarted = true;
+            console.log(data.toString());
+        });
 
-    initChainProcess.stdout.on("data", function(data) {
-        chainStarted = true;
-        console.log(data.toString());
-    });
+        mineBlockProcess.stdout.on("data", function (data) {
+            console.log(data.toString());
+        });
 
-    mineBlockProcess.stdout.on("data", function(data) {
-        console.log(data.toString());
-    });
-
-    process.on("exit", () => {
-        initChainProcess.kill();
-        mineBlockProcess.kill();
+        process.on("exit", () => {
+            initChainProcess.kill();
+            mineBlockProcess.kill();
+        });
     });
 });
