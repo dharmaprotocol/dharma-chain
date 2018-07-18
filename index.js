@@ -27,13 +27,12 @@ const installGanacheProcess = child_process.exec(
     }
 );
 
-console.log("Replacing working data with pristine blockchain state");
-child_process.exec("rm -r data/working", () => {
-    child_process.exec("cp -r ./data/pristine ./data/working");
-});
-
 // Once we have installed Ganache-CLI, we can init a chain and migrate the contracts.
-installGanacheProcess.on("exit", () => {
+installGanacheProcess.on("exit", async () => {
+    console.log("Replacing working data with pristine blockchain state");
+    await child_process.exec("rm -r data/working");
+    await child_process.exec("cp -r ./data/pristine ./data/working");
+
     const initChainProcess = child_process.spawn(`${scriptsDir}/init_chain.sh`);
     const mineBlockProcess = child_process.spawn(`${scriptsDir}/mine_block.sh`);
 
