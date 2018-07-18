@@ -1,6 +1,6 @@
 {
   "name": "dharma-chain",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Set up a local blockchain running Ethereum with Dharma Protocol Smart Contracts",
   "bin": {
     "dharma-chain": "./index.js"
