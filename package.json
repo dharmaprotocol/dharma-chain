@@ -5,6 +5,9 @@
   "bin": {
     "dharma-chain": "./index.js"
   },
+  "scripts": {
+    "dharma-chain": "./index.js"
+  },
   "author": "Dharma Labs",
   "license": "MIT",
   "dependencies": {}
