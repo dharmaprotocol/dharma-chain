@@ -6,7 +6,8 @@
     "dharma-chain": "./index.js"
   },
   "scripts": {
-    "dharma-chain": "./index.js"
+    "dharma-chain": "./index.js",
+    "update-pristine-state": "bash ./scripts/copy_working_db_to_pristine_db.sh"
   },
   "author": "Dharma Labs",
   "license": "MIT",
